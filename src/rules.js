@@ -153,6 +153,11 @@ export const RULES = [
     remediation: "A long base64 string in a skill often hides code or data. Decode and inspect it.",
     detect: (t) => matchesOf(t, /[A-Za-z0-9+/]{240,}={0,2}/g) },
 
+  { id: "SKILL-OBF-004", severity: "high", category: "obfuscation", appliesTo: "code",
+    title: "PowerShell encoded or hex decoded execution",
+    remediation: "Encoded PowerShell and decoded shell payloads hide commands from review. Inspect the payload before execution.",
+    pattern: /(powershell(?:\.exe)?\s+[^\n]*(?:-enc|-encodedcommand)|xxd\s+-r\s+-p[^\n]*\|\s*(sh|bash|powershell|pwsh))/gi },
+
   // ---- Permissions ----
   { id: "SKILL-PERM-001", severity: "medium", category: "over-permission", appliesTo: "prose",
     title: "Requests wildcard / all tool access",
