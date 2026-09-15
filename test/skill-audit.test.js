@@ -414,3 +414,15 @@ test("directory walks scan batch, fish, and PowerShell module scripts", (t) => {
     .filter((file) => /\.(bat|cmd|fish|psm1)$/i.test(file))
     .map((file) => relative(root, file)).sort());
 });
+
+test("SKILL-OBF-004 detects encoded PowerShell and xxd decode pipelines while allowing normal PowerShell", () => {
+  const malicious = [
+    "powershell.exe -EncodedCommand AAAA",
+    "echo 68656c6c6f | xxd -r -p | bash",
+  ];
+  for (const text of malicious) {
+    assert.ok(scanText("```powershell\n" + text + "\n```", "SKILL.md", null).some((f) => f.rule === "SKILL-OBF-004"));
+  }
+  const clean = scanText("Use PowerShell to inspect files.", "SKILL.md", null);
+  assert.ok(!clean.some((f) => f.rule === "SKILL-OBF-004"));
+});
