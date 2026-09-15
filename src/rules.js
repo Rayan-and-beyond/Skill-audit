@@ -180,6 +180,11 @@ export const RULES = [
     remediation: "Login Data, Cookies, key4.db, or logins.json hold saved passwords and sessions.",
     pattern: /(Login[\s\\'"]{0,3}Data|key4\.db|logins\.json|cookies\.sqlite|\bCookies\b(?=[^a-z]))/g },
 
+  { id: "SKILL-SEC-007", severity: "high", category: "secret-access", appliesTo: "code",
+    title: "Reads shell history files",
+    remediation: "Shell history files can contain credentials, tokens, and sensitive commands. Treat access as secret collection.",
+    pattern: /(?:~\/?|\$HOME\/)?(?:\.bash_history|\.zsh_history|ConsoleHost_history\.txt)\b/gi },
+
   { id: "SKILL-SEC-006", severity: "high", category: "secret-access", appliesTo: "any",
     title: "Disables TLS certificate verification",
     remediation: "Turning off TLS verification invites MITM attacks. Use proper CAs or pin certificates instead.",

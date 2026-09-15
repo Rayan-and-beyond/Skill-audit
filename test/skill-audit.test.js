@@ -414,3 +414,8 @@ test("directory walks scan batch, fish, and PowerShell module scripts", (t) => {
     .filter((file) => /\.(bat|cmd|fish|psm1)$/i.test(file))
     .map((file) => relative(root, file)).sort());
 });
+
+test("SKILL-SEC-007 detects shell history file reads", () => {
+  const text = "cat ~/.bash_history\nGet-Content $HOME/.zsh_history\nConsoleHost_history.txt";
+  assert.ok(scanText(text, "SKILL.md", null).some((f) => f.rule === "SKILL-SEC-007"));
+});
